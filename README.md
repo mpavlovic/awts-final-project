@@ -26,8 +26,8 @@ DBMS: JavaDB\
 Data Access: ORM (EclipseLink), Criteria API\
 Email Server: James\
 Processes and shows email messages\
-Sends message to JSM message queue _NWTiS_mpavlovi2_1_, for email processing statistics\
-Sends message to JSM message queue _NWTiS_mpavlovi2_2_, for new address\
+Sends message to JMS message queue _NWTiS_mpavlovi2_1_, for email processing statistics\
+Sends message to JMS message queue _NWTiS_mpavlovi2_2_, for new address\
 Uses socket server from first application for user type change and for price list download/update\
 Uses SOAP service from first application for addresses and their weather data\
 Implements REST web service for active users and their added addresses\
