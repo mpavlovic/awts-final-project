@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2.6-1b01  svn-revision#13094. --><xs:schema xmlns:tns="http://ws.servers.mpavlovi2.nwtis.foi.hr/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.servers.mpavlovi2.nwtis.foi.hr/">
+
+<xs:element name="getAllAddresses" type="tns:getAllAddresses" />
+
+<xs:element name="getAllAddressesResponse" type="tns:getAllAddressesResponse" />
+
+<xs:element name="getCurrentWeatherData" type="tns:getCurrentWeatherData" />
+
+<xs:element name="getCurrentWeatherDataResponse" type="tns:getCurrentWeatherDataResponse" />
+
+<xs:element name="getDailyWeatherForecast" type="tns:getDailyWeatherForecast" />
+
+<xs:element name="getDailyWeatherForecastResponse" type="tns:getDailyWeatherForecastResponse" />
+
+<xs:element name="getGeoWeatherRankList" type="tns:getGeoWeatherRankList" />
+
+<xs:element name="getGeoWeatherRankListResponse" type="tns:getGeoWeatherRankListResponse" />
+
+<xs:element name="getHourlyWeatherForecast" type="tns:getHourlyWeatherForecast" />
+
+<xs:element name="getHourlyWeatherForecastResponse" type="tns:getHourlyWeatherForecastResponse" />
+
+<xs:element name="getLastWeatherData" type="tns:getLastWeatherData" />
+
+<xs:element name="getLastWeatherDataResponse" type="tns:getLastWeatherDataResponse" />
+
+<xs:element name="getNearWeatherStations" type="tns:getNearWeatherStations" />
+
+<xs:element name="getNearWeatherStationsResponse" type="tns:getNearWeatherStationsResponse" />
+
+<xs:element name="getUserAddresses" type="tns:getUserAddresses" />
+
+<xs:element name="getUserAddressesResponse" type="tns:getUserAddressesResponse" />
+
+<xs:element name="getWeatherDataInInterval" type="tns:getWeatherDataInInterval" />
+
+<xs:element name="getWeatherDataInIntervalResponse" type="tns:getWeatherDataInIntervalResponse" />
+
+<xs:element name="wsResponse" type="tns:wsResponse" />
+
+<xs:complexType name="getUserAddresses">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserAddressesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="wsResponse">
+<xs:sequence>
+<xs:element name="addressRankListForWeather" type="tns:address" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="allAddresses" type="tns:address" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="currentWeatherData" type="tns:meteoPodaci" minOccurs="0" />
+<xs:element name="dailyForecast" type="tns:meteoPrognoza" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="hourlyForecast" type="tns:meteoPrognoza" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="intervalWeatherData" type="tns:meteoPodaci" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="lastWeatherData" type="tns:meteoPodaci" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="nearWeatherStations" type="tns:weatherStation" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="responseMessage" type="xs:string" minOccurs="0" />
+<xs:element name="userAddresses" type="tns:address" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="address">
+<xs:sequence>
+<xs:element name="address" type="xs:string" minOccurs="0" />
+<xs:element name="id" type="xs:int" />
+<xs:element name="location" type="tns:lokacija" minOccurs="0" />
+<xs:element name="status" type="xs:int" />
+<xs:element name="userId" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="lokacija">
+<xs:sequence>
+<xs:element name="latitude" type="xs:string" minOccurs="0" />
+<xs:element name="longitude" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="meteoPodaci">
+<xs:sequence>
+<xs:element name="addressId" type="xs:int" />
+<xs:element name="cloudsName" type="xs:string" minOccurs="0" />
+<xs:element name="cloudsValue" type="xs:int" />
+<xs:element name="humidityUnit" type="xs:string" minOccurs="0" />
+<xs:element name="humidityValue" type="xs:float" minOccurs="0" />
+<xs:element name="lastUpdate" type="xs:dateTime" minOccurs="0" />
+<xs:element name="precipitationMode" type="xs:string" minOccurs="0" />
+<xs:element name="precipitationUnit" type="xs:string" minOccurs="0" />
+<xs:element name="precipitationValue" type="xs:float" minOccurs="0" />
+<xs:element name="pressureUnit" type="xs:string" minOccurs="0" />
+<xs:element name="pressureValue" type="xs:float" minOccurs="0" />
+<xs:element name="sunRise" type="xs:dateTime" minOccurs="0" />
+<xs:element name="sunSet" type="xs:dateTime" minOccurs="0" />
+<xs:element name="temperatureMax" type="xs:float" minOccurs="0" />
+<xs:element name="temperatureMin" type="xs:float" minOccurs="0" />
+<xs:element name="temperatureUnit" type="xs:string" minOccurs="0" />
+<xs:element name="temperatureValue" type="xs:float" minOccurs="0" />
+<xs:element name="visibility" type="xs:string" minOccurs="0" />
+<xs:element name="weatherIcon" type="xs:string" minOccurs="0" />
+<xs:element name="weatherNumber" type="xs:int" />
+<xs:element name="weatherValue" type="xs:string" minOccurs="0" />
+<xs:element name="windDirectionCode" type="xs:string" minOccurs="0" />
+<xs:element name="windDirectionName" type="xs:string" minOccurs="0" />
+<xs:element name="windDirectionValue" type="xs:float" minOccurs="0" />
+<xs:element name="windSpeedName" type="xs:string" minOccurs="0" />
+<xs:element name="windSpeedValue" type="xs:float" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="meteoPrognoza">
+<xs:sequence>
+<xs:element name="adresa" type="xs:string" minOccurs="0" />
+<xs:element name="dan" type="xs:int" />
+<xs:element name="datum" type="xs:string" minOccurs="0" />
+<xs:element name="prognoza" type="tns:meteoPodaci" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="weatherStation">
+<xs:sequence>
+<xs:element name="distance" type="xs:string" minOccurs="0" />
+<xs:element name="id" type="xs:string" minOccurs="0" />
+<xs:element name="locaiton" type="tns:lokacija" minOccurs="0" />
+<xs:element name="name" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getNearWeatherStations">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+<xs:element name="latitude" type="xs:string" minOccurs="0" />
+<xs:element name="longitude" type="xs:string" minOccurs="0" />
+<xs:element name="numberOfStations" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getNearWeatherStationsResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getHourlyWeatherForecast">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+<xs:element name="latitude" type="xs:string" minOccurs="0" />
+<xs:element name="longitude" type="xs:string" minOccurs="0" />
+<xs:element name="numberOfHours" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getHourlyWeatherForecastResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getWeatherDataInInterval">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+<xs:element name="addressName" type="xs:string" minOccurs="0" />
+<xs:element name="startDate" type="xs:string" minOccurs="0" />
+<xs:element name="endDate" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getWeatherDataInIntervalResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getCurrentWeatherData">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+<xs:element name="addressName" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getCurrentWeatherDataResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getLastWeatherData">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+<xs:element name="addressName" type="xs:string" minOccurs="0" />
+<xs:element name="numberOfRecords" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getLastWeatherDataResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getDailyWeatherForecast">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+<xs:element name="latitude" type="xs:string" minOccurs="0" />
+<xs:element name="longitude" type="xs:string" minOccurs="0" />
+<xs:element name="numberOfDays" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getDailyWeatherForecastResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getAllAddresses">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getAllAddressesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getGeoWeatherRankList">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+<xs:element name="topNumber" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getGeoWeatherRankListResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:wsResponse" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

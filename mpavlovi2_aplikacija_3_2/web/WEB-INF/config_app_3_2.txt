@@ -1,0 +1,5 @@
+datotekaPorukaStatistike=statistika.ser
+datotekaPorukaAdresa=adrese.ser
+
+socketServerPort=9001
+socketServerHost=localhost

@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./mainTemplate.xhtml">
+
+            <ui:define name="naslov">
+                #{lang.dnevnik_naslov}
+            </ui:define>
+
+            <ui:define name="top">
+                #{lang.dnevnik_naslov}
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form"> 
+                    <h:outputLabel for="timeFrom" value="#{lang.dnevnik_vrijemeOd}"/>
+                    <h:inputText id="timeFrom" value="#{logViewer.timeFrom}" size="21"/>
+                    <h:outputText value=" (yyyy-MM-dd HH:mm:ss.SSS)"/><br/>
+                    
+                    <h:outputLabel for="timeTo" value="#{lang.dnevnik_vrijemeDo}"/>
+                    <h:inputText id="timeTo" value="#{logViewer.timeTo}" size="21"/>
+                    <h:outputText value=" (yyyy-MM-dd HH:mm:ss.SSS)"/><br/><br/>
+                    
+                    <h:outputLabel for="ip" value="#{lang.dnevnik_ip}: "/>
+                    <h:inputText id="ip" value="#{logViewer.ipAddress}"/><br/><br/>
+                    
+                    <h:outputLabel for="user" value="#{lang.dnevnik_korisnik}: "/>
+                    <h:inputText id="user" value="#{logViewer.username}"/> &nbsp;
+                    
+                    <h:commandButton value="#{lang.dnevnik_filter}" action="#{logViewer.filterLogs()}">
+                        <f:ajax execute="timeFrom timeTo ip user" render="form"/>
+                    </h:commandButton><br/><br/>
+                    
+                    <h:panelGroup rendered="#{logViewer.showLogs}">
+                        <h:commandButton value="#{lang.adrese_zatvori}" action="#{logViewer.setShowLogs(false)}">
+                            <f:ajax render="form" />
+                        </h:commandButton>
+                        
+                        <p:dataTable value="#{logViewer.logs}" var="log" 
+                                     rows="10"
+                                     paginator="true"   
+                                     paginatorTemplate="{CurrentPageReport}  
+                                     {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                     rowsPerPageTemplate="10,15,20" 
+                                     paginatorPosition="bottom" emptyMessage="#{lang.adrese_empty}" 
+                                     resizableColumns="true">
+                            
+                            <f:facet name="header">#{lang.dnevnik_logs}</f:facet>
+                            
+                            <p:column headerText="#{lang.dnevnik_url}">
+                                #{log.url}
+                            </p:column>
+                            
+                            <p:column headerText="#{lang.dnevnik_ip}" width="10%">
+                                #{log.ipadresa}
+                            </p:column>
+                            
+                            <p:column headerText="#{lang.dnevnik_vrijeme}" width="15%">
+                                <h:outputText value="#{log.vrijeme}">
+                                    <f:convertDateTime timeZone="GMT+2:00" pattern="yyyy-MM-dd HH:mm:ss.SSS" />
+                                </h:outputText>
+                                
+                            </p:column>
+                            
+                            <p:column headerText="#{lang.dnevnik_trajanje}" width="6%">
+                                #{log.trajanje} ms
+                            </p:column>
+                            
+                            <p:column headerText="#{lang.dnevnik_status}" width="3%">
+                                #{log.status}
+                            </p:column>
+                            
+                            <p:column headerText="#{lang.dnevnik_korisnik}" width="7%">
+                                #{log.korisnikId.username}
+                            </p:column>
+                            
+                        </p:dataTable>
+                    </h:panelGroup>
+                    
+                    <p:messages for="form" autoUpdate="true"/>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

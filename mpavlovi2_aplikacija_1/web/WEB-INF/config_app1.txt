@@ -1,0 +1,9 @@
+port=9001
+interval=60
+cjenik=cjenik.xml
+apiKey=24b65581fe89b09156bd455b43db0e5e
+mailServer=nwtis.nastava.foi.hr
+posiljatelj=server@nwtis.nastava.foi.hr
+primatelj=servis@nwtis.nastava.foi.hr
+predmet=NWTIS poruka
+velicinaStranice=10

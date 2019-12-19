@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./mainTemplate.xhtml">
+
+            <ui:define name="naslov">
+                #{lang.registracija_registracija}
+            </ui:define>
+
+            <ui:define name="top">
+                #{lang.registracija_registracija}
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <h:outputLabel value="#{lang.registracija_username}" for="username"/>
+                    <h:inputText value="#{registration.username}"
+                                 validator="#{registration.validateUsername}"
+                                 id="username"/>&nbsp;
+                    <h:message for="username" style="color: red"/><br/>
+
+                    <h:outputLabel value="#{lang.registracija_password}" for="password"/>
+                    <h:inputSecret value="#{registration.password}" 
+                                   validator="#{registration.validatePassword}" 
+                                   id="password"> 
+                        <f:attribute name="confirm" value="#{confirm}" />
+                    </h:inputSecret>&nbsp;
+                    <h:message for="password" style="color: red" /><br/>
+
+                    <h:outputLabel value="#{lang.registracija_repeatPass}" for="repeatPassword"/>
+                    <h:inputSecret value="#{registration.repeatedPassword}" binding="#{confirm}" id="repeatPassword"/>&nbsp;
+
+                    <h:commandButton value="#{lang.registracija_registriraj}" action="#{registration.register()}" id="register"/>
+                    <h:message for="register" style="color: black"/>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

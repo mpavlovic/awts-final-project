@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./mainTemplate.xhtml">
+
+            <ui:define name="naslov">
+                #{lang.cjenik_naslov}
+            </ui:define>
+
+            <ui:define name="top">
+                #{lang.cjenik_naslov}
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="false"/>
+                    
+                    <h:commandButton value="#{lang.cjenik_novaUsluga}" 
+                                     action="#{priceListEditor.setShowAddNewService(true)}">
+                        <f:ajax render="form" />
+                    </h:commandButton> &nbsp;
+                    
+                    <h:panelGroup rendered="#{priceListEditor.showAddNewService}">
+                        <h:outputLabel for="newService" value="#{lang.cjenik_usluga}" />
+                        <h:inputText id="newService" value="#{priceListEditor.newServiceName}" /> &nbsp;
+                        <h:outputLabel for="newPrice" value="#{lang.cjenik_cijena}" />
+                        <h:inputText id="newPrice" value="#{priceListEditor.newServicePrice}" /> &nbsp;
+                        <h:commandButton value="#{lang.cjenik_spremi}" action="#{priceListEditor.addNewService()}">
+                            <f:ajax execute="newService newPrice" render="form" />
+                        </h:commandButton>
+                    </h:panelGroup> <br/><br/>
+                    
+                    <h:commandButton value="#{lang.cjenik_upload}" action="#{priceListEditor.uploadPriceList()}">
+                        <f:ajax render="form" />
+                    </h:commandButton>
+                    
+                    <br/><br/>
+                    <p:dataTable value="#{priceListEditor.priceItems}" var="item" 
+                                     rows="15"
+                                     paginator="true"   
+                                     paginatorTemplate="{CurrentPageReport}  
+                                     {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                     rowsPerPageTemplate="10,15,20" 
+                                     paginatorPosition="bottom" emptyMessage="#{lang.adrese_empty}" 
+                                     resizableColumns="true"
+                                     editable="true">
+                        
+                        <f:facet name="header">#{lang.cjenik_trenutni}</f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{priceListEditor.onRowEdit}" update=":form:messages" />
+                        
+                        <p:column headerText="#{lang.cjenik_usluga}">
+                            <h:outputText value="#{item.name}" />
+                        </p:column>
+                        
+                        <p:column headerText="#{lang.cjenik_cijena}">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.value}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{item.value}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column style="width:50px">
+                            <p:rowEditor />
+                        </p:column>
+                        
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

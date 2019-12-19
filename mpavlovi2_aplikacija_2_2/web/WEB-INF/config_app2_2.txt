@@ -1,0 +1,20 @@
+server=nwtis.nastava.foi.hr
+imapPort=143
+defaultUsername=servis@nwtis.nastava.foi.hr
+brojNovihPoruka=20
+interval=60
+
+clientUsername=servis@nwtis.nastava.foi.hr
+clientPassword=123456
+predmetPorukeZaObradu=NWTIS poruka
+ispravnePorukeFolder=NWTIS_IspravnePoruke
+ostalePorukeFolder=NWTIS_OstalePoruke
+
+adminUsername=servis@nwtis.nastava.foi.hr
+adminPassword=123456
+
+socketServerPort=9001
+socketServerHost=localhost
+
+tempCjenik=cjenik_temp.xml
+

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/mpavlovi2_aplikacija_1">
+    <Realm className="org.apache.catalina.realm.JDBCRealm"
+                 driverName="com.mysql.jdbc.Driver"
+                 connectionURL="jdbc:mysql://localhost/nwtis_mpavlovi2_bp_1?user=mpavlovi2&amp;password=nwtis"
+                 userTable="korisnik" userNameCol="username" userCredCol="password"
+                 userRoleTable="korisnik" roleNameCol="uloga_id"/>
+</Context>

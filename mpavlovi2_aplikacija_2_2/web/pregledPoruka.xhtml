@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./mainTemplate.xhtml">
+
+            <ui:define name="naslov">
+                #{lang.poruke_naslov}
+            </ui:define>
+
+            <ui:define name="top">
+                #{lang.poruke_naslov}
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <h:outputLabel value="#{lang.poruke_folder}"/><br/>
+                    <h:selectOneListbox id="folder" value="#{mailViewer.selectedFolder}">
+                        <f:selectItems value="#{mailViewer.folders}" />
+                    </h:selectOneListbox>
+                    <h:commandButton value="#{lang.poruke_refresh}" action="#{mailViewer.retrieveMessages()}">
+                        <f:ajax execute="folder" render="form"/>
+                    </h:commandButton><br/><br/>
+                    
+                    <h:panelGroup id="mailView" rendered="#{mailViewer.showMailContent}">
+                        <h:outputLabel value="#{lang.poruke_salje}: " style="font-weight: bold"/>
+                        #{mailViewer.selectedMessage.salje} <br/>
+                        
+                        <h:outputLabel value="#{lang.poruke_predmet}: " style="font-weight: bold" />
+                        #{mailViewer.selectedMessage.predmet} <br/>
+                        
+                        <h:outputLabel value="#{lang.poruke_vrijeme}: " style="font-weight: bold"/>
+                        <h:outputText value="#{mailViewer.selectedMessage.vrijeme}"> 
+                                <f:convertDateTime pattern="dd.MM.yyy HH:mm:ss"/>
+                        </h:outputText> <br/>
+                        
+                        <h:outputLabel value="#{lang.poruke_sadrzaj}" style="font-weight: bold"/><br/>
+                        <h:outputText value="#{mailViewer.selectedMessage.sadrzaj}" escape="false" />
+                        <h:commandButton value="#{lang.adrese_zatvori}" action="#{mailViewer.setShowMailContent(false)}">
+                            <f:ajax render="form" />
+                        </h:commandButton><br/><br/>                        
+                    </h:panelGroup> <br/>
+                    
+                    <h:commandButton value="#{lang.poruke_brisiSve}" action="#{mailViewer.deleteAllMessages()}"
+                                     style="float: right">
+                        <f:ajax render="form" />
+                    </h:commandButton><br/><br/>
+                    
+                    <p:dataTable value="#{mailViewer.messages}" var="mail" 
+                                 rows="10"
+                                 paginator="true"   
+                                 paginatorTemplate="{CurrentPageReport}  
+                                 {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                 rowsPerPageTemplate="10,15,20" 
+                                 paginatorPosition="bottom" emptyMessage="#{lang.adrese_empty}" 
+                                 resizableColumns="true">
+
+                        <f:facet name="header">#{lang.poruke_poruke}</f:facet>
+
+                        <p:column headerText="#{lang.poruke_salje}" filterBy="#{mail.salje}" filterMatchMode="contains">
+                            #{mail.salje}
+                        </p:column>
+                        
+                        <p:column headerText="#{lang.poruke_predmet}" filterBy="#{mail.predmet}" filterMatchMode="contains">
+                            #{mail.predmet}
+                        </p:column>
+                        
+                        <p:column headerText="#{lang.poruke_vrijeme}">
+                            <h:outputText value="#{mail.vrijeme}"> 
+                                <f:convertDateTime pattern="dd.MM.yyy HH:mm:ss"/>
+                            </h:outputText>
+                        </p:column>
+                        
+                        <p:column headerText="#{lang.poruke_pregled}" style="text-align: center">
+                            <h:commandLink value="#{lang.poruke_pregled}" 
+                                             action="#{mailViewer.showMessage(mail.messageNumber)}">
+                                <f:ajax render="form" />
+                            </h:commandLink>
+                        </p:column>
+                        
+                        <p:column headerText="#{lang.poruke_brisi}" style="text-align: center">
+                            <h:commandLink value="#{lang.poruke_brisi}" 
+                                             action="#{mailViewer.deleteMessage(mail.messageNumber)}">
+                                <f:ajax render="form" />
+                            </h:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                    <p:messages id="msgs" showDetail="false"/>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:m="http://code.google.com/p/gmaps4jsf/">
+
+    <body>
+
+        <ui:composition template="./mainTemplate.xhtml">
+
+            <ui:define name="naslov">
+                #{lang.adrese_naslov}
+            </ui:define>
+
+            <ui:define name="top">
+                #{lang.adrese_naslov}
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <table>
+                        <tr>
+                            <td>
+                                <h:commandButton value="#{lang.adrese_prikaziDodajNovu}" action="#{addressManager.setShowNewAddress(true)}">
+                                    <f:ajax render="form" />
+                                </h:commandButton>&nbsp;
+                                <h:panelGroup rendered="#{addressManager.showNewAddress}">
+                                    <h:outputLabel for="newAddress" value="#{lang.adrese_nova}"/>&nbsp;
+                                    <h:inputText id="newAddress" value="#{addressManager.newAddress}"/>
+                                    <h:commandButton value="#{lang.adrese_spremi}" action="#{addressManager.addNewAddress()}">
+                                        <f:ajax execute="newAddress" render="form"/>
+                                    </h:commandButton> 
+                                </h:panelGroup>
+                                <p:messages for="newAddress" autoUpdate="true" />
+                                <h:selectOneListbox id="addresses" value="#{addressManager.selectedActiveAddressName}">
+                                    <f:selectItems value="#{addressManager.activeAddresses}" /><br/>
+                                </h:selectOneListbox>
+                            </td>
+                            <td>
+                                <h:commandButton value="#{lang.adrese_refresh}" action="#{addressManager.retrieveActiveAddresses()}">
+                                    <f:ajax render="form" />
+                                </h:commandButton> <br/>
+                                
+                                <h:commandButton value="#{lang.adrese_current}" action="#{addressManager.retrieveCurrentWeatherData()}">
+                                    <f:ajax execute="addresses" render="form"/>
+                                </h:commandButton> <br/>
+
+                                <h:commandButton value="#{lang.adrese_korisnik}" action="#{addressManager.retrieveUserAddresses()}">
+                                    <f:ajax render="form" />
+                                </h:commandButton> <br/>
+
+                                <h:outputLabel for="numOfRecs" value="#{lang.adrese_numOfRecs}"/>
+                                <h:inputText value="#{addressManager.numOfRecordsForLastWeatherData}" 
+                                             id="numOfRecs" validatorMessage="#{lang.adrese_badLastRange}">
+                                    <f:validateLongRange minimum="1" maximum="500"/>
+                                </h:inputText>&nbsp;
+                                <h:commandButton value="#{lang.adrese_last}" action="#{addressManager.retrieveLastWeatherData()}">
+                                    <f:ajax execute="numOfRecs addresses" render="form" />
+                                </h:commandButton> &nbsp; <h:message for="numOfRecs" /><br/>
+
+                                <h:outputLabel for="numOfStations" value="#{lang.adrese_numOfStations}"/>
+                                <h:inputText value="#{addressManager.numOfStations}" 
+                                             id="numOfStations" validatorMessage="#{lang.adrese_badLastRange}">
+                                    <f:validateLongRange minimum="1" maximum="500"/>
+                                </h:inputText>&nbsp;
+                                <h:commandButton value="#{lang.adrese_stations}" action="#{addressManager.retrieveWeatherStations()}">
+                                    <f:ajax execute="numOfStations addresses" render="form" />
+                                </h:commandButton> <h:message for="numOfStations" /><br/>
+
+                                <br/>
+                                <h:panelGroup id="currentWeatherData" rendered="#{addressManager.showCurrentWeatherData}">
+                                    #{lang.adrese_temeperatura}: #{addressManager.currentWeatherData.temperatureValue} °C <br/>
+                                    #{lang.adrese_vlaga}: #{addressManager.currentWeatherData.humidityValue} % <br/>
+                                    #{lang.adrese_tlak}: #{addressManager.currentWeatherData.pressureValue} hPa<br/>
+                                    #{lang.adrese_vjetar}: #{addressManager.currentWeatherData.windSpeedValue} m/s <br/>
+                                    #{lang.adrese_oblaci}: #{addressManager.currentWeatherData.cloudsValue}&nbsp;
+                                    <h:commandButton value="#{lang.adrese_zatvori}" action="#{addressManager.setShowCurrentWeatherData(false)}">
+                                        <f:ajax render="form" />
+                                    </h:commandButton>
+                                    <br/><br/>
+                                </h:panelGroup>
+                            </td>
+                        </tr>
+                    </table>
+                    <h:panelGroup id="userAddresses" rendered="#{addressManager.showUserAddresses}">
+                        <h:commandButton style="float: right" value="#{lang.adrese_zatvori}" action="#{addressManager.setShowUserAddresses(false)}">
+                            <f:ajax render="form" />
+                        </h:commandButton>
+                        <p:dataTable value="#{addressManager.userAddresses}"
+                                     var="address" 
+                                     paginator="true" rows="5"  
+                                     paginatorTemplate="{CurrentPageReport}  
+                                     {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                     rowsPerPageTemplate="5,10,15"
+                                     paginatorPosition="bottom" emptyMessage="#{lang.adrese_empty}">
+                            <f:facet name="header">
+                                #{lang.adrese_vase}
+                            </f:facet>
+
+                            <p:column headerText="#{lang.adrese_adresa}">
+                                #{address.address}
+                            </p:column>
+
+                            <p:column headerText="#{lang.adrese_sirina}">
+                                #{address.location.longitude}
+                            </p:column>
+
+                            <p:column headerText="#{lang.adrese_duzina}">
+                                #{address.location.latitude}
+                            </p:column>
+
+                            <p:column headerText="#{lang.adrese_status}">
+                                <h:outputText value="#{address.status eq 1 ? lang.adrese_statusPoz : lang.adrese_statusNeg}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGroup><br/>
+
+                    <h:panelGroup id="lastweatherData" rendered="#{addressManager.showLastWeatherData}">
+                        <h:commandButton style="float: right" value="#{lang.adrese_zatvori}" action="#{addressManager.setShowLastWeatherData(false)}">
+                            <f:ajax render="form" />
+                        </h:commandButton>
+
+                        <p:dataTable value="#{addressManager.lastWeatherData}"
+                                     var="lastData" 
+                                     paginator="true" rows="5"  
+                                     paginatorTemplate="{CurrentPageReport}  
+                                     {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                     rowsPerPageTemplate="5,10,15"
+                                     paginatorPosition="bottom" emptyMessage="#{lang.adrese_empty}">
+
+                            <f:facet name="header">
+                                #{lang.adrese_lastTable} #{addressManager.selectedActiveAddressName}
+                            </f:facet>
+                            <p:column headerText="#{lang.adrese_temeperatura}">
+                                #{lastData.temperatureValue} °C
+                            </p:column>
+                            <p:column headerText="#{lang.adrese_vlaga}">
+                                #{lastData.humidityValue} %
+                            </p:column>
+                            <p:column headerText="#{lang.adrese_tlak}">
+                                #{lastData.pressureValue} hPa
+                            </p:column>
+                            <p:column headerText="#{lang.adrese_vjetar}">
+                                #{lastData.windSpeedValue} m/s
+                            </p:column>
+                            <p:column headerText="#{lang.adrese_oblaci}">
+                                #{lastData.cloudsValue}
+                            </p:column>
+                            <p:column headerText="#{lang.adrese_vrijeme}">
+                                <h:outputText value="#{lastData.lastUpdate.toGregorianCalendar().time}">
+                                    <f:convertDateTime timeZone="GMT+2:00" type="both" pattern="dd.MM.YYYY HH:mm:ss"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable> <br/>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="gmapStations" rendered="#{addressManager.showWeatherStations}">
+                        <h:commandButton style="float: right" value="#{lang.adrese_zatvori}" action="#{addressManager.setShowWeatherStations(false)}">
+                            <f:ajax render="form" />
+                        </h:commandButton>
+                        <m:map width="auto" height="400px" latitude="#{addressManager.selectedActiveAddressLocation.latitude}" 
+                               longitude="#{addressManager.selectedActiveAddressLocation.longitude}" 
+                               rendered="#{addressManager.showWeatherStations}" partiallyTriggered="true" zoom="8">
+
+                            <m:marker latitude="#{addressManager.selectedActiveAddressLocation.latitude}" 
+                                      longitude="#{addressManager.selectedActiveAddressLocation.longitude}"/>
+
+                            <ui:repeat value="#{addressManager.weatherStations}" var="station">
+                                <m:htmlInformationWindow latitude="#{station.locaiton.latitude}" 
+                                                         longitude="#{station.locaiton.longitude}" 
+                                                         htmlText="#{lang.adrese_ime} #{station.name},  
+                                                         #{lang.adrese_udaljenost} #{station.distance} m,  
+                                                         #{lang.adrese_id} #{station.id}"/>
+                            </ui:repeat> 
+                        </m:map>
+                    </h:panelGroup>
+
+                    <p:messages for="addresses" autoUpdate="true" />
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

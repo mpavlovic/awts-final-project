@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./mainTemplate.xhtml">
+
+            <ui:define name="content">
+                
+                <h:form id="users">
+                    <h:selectOneListbox id="activeUser" value="#{messageManager.activeUserName}">
+                        <f:selectItems value="#{messageManager.activeUsersList}" />
+                    </h:selectOneListbox>
+                    <h:commandButton value="Osvježi aktivne korisnike"
+                                     action="#{messageManager.retrieveActiveUsers()}">
+                        <f:ajax render="users" />
+                    </h:commandButton> <br/>
+                    
+                    <h:commandButton value="Prikaži adrese korisnika" action="#{messageManager.retrieveActiveUserAddresses()}">
+                        <f:ajax execute="activeUser" render="users" />
+                    </h:commandButton><br/><br/>
+                    
+                    <h:panelGroup rendered="#{messageManager.showWeatherData}">
+                        Temperatura: #{messageManager.weatherData.temperature} °C <br/>
+                        Vlaga: #{messageManager.weatherData.humidity} % <br/>
+                        Tlak: #{messageManager.weatherData.pressure} hPa <br/>
+                        Zemljopisna širina: #{messageManager.weatherData.latitude} <br/>
+                        Zemljopisna dužina: #{messageManager.weatherData.longitude} <br/>
+                        <h:commandButton value="Zatvori" action="#{messageManager.setShowWeatherData(false)}">
+                            <f:ajax render="users"/>
+                        </h:commandButton>
+                    </h:panelGroup><br/><br/>
+                    
+                    <h:commandButton value="Dodaj novog korisnika" action="#{messageManager.setShowAddNewUser(true)}">
+                        <f:ajax render="users" />
+                    </h:commandButton><br/>
+                    
+                    <h:panelGroup rendered="#{messageManager.showAddNewUser}">
+                        <h:outputLabel for="username" value="Korisničko ime: " />
+                        <h:inputText id="username" value="#{messageManager.newUsername}" /> <br/>
+                        <h:outputLabel for="password" value="Lozinka: "/>
+                        <h:inputSecret id="password" value="#{messageManager.newPassword}"/>
+                        <h:commandButton value="Dodaj" action="#{messageManager.addNewUser()}">
+                            <f:ajax execute="username password" render="users" />
+                        </h:commandButton>
+                    </h:panelGroup>
+                    
+                    <br/><br/>
+                    
+                    <h:panelGroup rendered="#{messageManager.showActiveUserAddresses}">
+                        <h:commandButton value="Zatvori" action="#{messageManager.setShowActiveUserAddresses(false)}">
+                            <f:ajax render="users" />
+                        </h:commandButton>
+                        <p:dataTable value="#{messageManager.activeUserAddresses}" var="address"
+                                     rows="5" paginator="true"   
+                                     paginatorTemplate="{CurrentPageReport}  
+                                     {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                     rowsPerPageTemplate="5,10,15" 
+                                     paginatorPosition="bottom" emptyMessage="Nema podataka" 
+                                     resizableColumns="true">
+                            
+                            <f:facet name="header">Adrese korisnika #{messageManager.activeUserName}</f:facet>
+                            
+                            <p:column headerText="Adresa">
+                                #{address}
+                            </p:column>
+                            
+                            <p:column headerText="Prikaži zadnje meteo podatke" style="text-align: center">
+                                <h:commandLink value="Prikaži zadnje meteo podatke"
+                                               action="#{messageManager.retrieveSimpleWeatherData(address)}">
+                                    <f:ajax render="users" />
+                                </h:commandLink>
+                            </p:column>
+                            
+                        </p:dataTable>
+                    </h:panelGroup>
+                    <br/>
+                    <p:messages id="msgs" showDetail="false" />
+                </h:form>
+                
+                
+                
+                <h:form id="form">
+                    <p:dataTable value="#{messageManager.addressMessages}" var="message"
+                             rows="10" paginator="true"   
+                             paginatorTemplate="{CurrentPageReport}  
+                             {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                             rowsPerPageTemplate="10,15,20" 
+                             paginatorPosition="bottom" emptyMessage="Nema podataka" 
+                             resizableColumns="true">
+                    
+                    <f:facet name="header">JMS poruke o novim adresama</f:facet>
+                    
+                    <p:column headerText="Adresa">
+                        #{message.address}
+                    </p:column>
+                    
+                    <p:column headerText="Korisnik">
+                        #{message.username}
+                    </p:column>
+                    
+                    <p:column headerText="Obriši" style="text-align: center">
+                        <h:commandLink value="Obriši" action="#{messageManager.deleteAddressMessage(message)}" 
+                                       style="text-align: center">
+                            <f:ajax render="form" />
+                        </h:commandLink>
+                    </p:column>
+                    
+                    </p:dataTable> 
+                    
+                    <br/>
+                    
+                    <p:dataTable value="#{messageManager.statisticsMessages}" var="message"
+                             rows="10" paginator="true"   
+                             paginatorTemplate="{CurrentPageReport}  
+                             {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                             rowsPerPageTemplate="10,15,20" 
+                             paginatorPosition="bottom" emptyMessage="Nema podataka" 
+                             resizableColumns="true">
+                        
+                        <f:facet name="header">JMS poruke statistike obrade mailova</f:facet>
+                        
+                        <p:column headerText="Vrijeme početka">
+                            #{message.startDatetime}
+                        </p:column>
+                    
+                        <p:column headerText="Vrijeme završetka">
+                             #{message.endDatetime}
+                        </p:column>
+                        
+                        <p:column headerText="Ukupno mailova">
+                            #{message.totalMessages}
+                        </p:column>
+                        
+                        <p:column headerText="Broj NWTIS mailova">
+                            #{message.nwtisMessages}
+                        </p:column>
+                        
+                        <p:column headerText="Dodani korisnici">
+                            #{message.addedUsers}
+                        </p:column>
+                        
+                        <p:column headerText="Odbačeni korisnici">
+                            #{message.rejectedUsers}
+                        </p:column>
+                        
+                        <p:column headerText="Obriši" style="text-align: center">
+                            <h:commandLink value="Obriši" action="#{messageManager.deleteStatisticsMessage(message)}">
+                                <f:ajax render="form" />
+                            </h:commandLink>
+                        </p:column>
+                        
+                    </p:dataTable>
+                    
+                    <p:remoteCommand name="refreshMessages" update="form" />
+                </h:form>
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

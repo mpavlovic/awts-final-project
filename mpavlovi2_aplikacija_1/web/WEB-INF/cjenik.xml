@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Cjenik zahtjeva</comment>
+<entry key="ADD">30</entry>
+<entry key="GET">20</entry>
+<entry key="TEST">10</entry>
+<entry key="TYPE">5</entry>
+
+<entry key="GET CURRENT DATA">5</entry>
+<entry key="GET USER ADDRESSES">25</entry>
+<entry key="GET ADDRESS RANK LIST">25</entry>
+<entry key="GET LAST WEATHER DATA">15</entry>
+<entry key="GET WEATHER DATA IN INTERVAL">30</entry>
+<entry key="GET WEATHER STATIONS">25</entry>
+<entry key="GET HOURLY FORECAST">30</entry>
+<entry key="GET DAILY FORECAST">25</entry>
+<entry key="GET ALL ADDRESSES">0</entry>
+
+</properties>
